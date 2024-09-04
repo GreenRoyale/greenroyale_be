@@ -10,6 +10,7 @@ const config = {
   DB_PORT: process.env.DB_PORT,
   DB_PASSWORD: process.env.DB_PASSWORD,
   DB_NAME: process.env.DB_NAME,
+  SWAGGER_JSON_URL: process.env.SWAGGER_JSON_URL,
 };
 
 export default config;

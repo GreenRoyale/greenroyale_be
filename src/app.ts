@@ -5,8 +5,10 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import hpp from "hpp";
 import morgan from "morgan";
+import swaggerUi from "swagger-ui-express";
 
 import config from "./config/index";
+import swaggerSpec from "./config/swaggerConfig";
 import { MethodNotAllowedError } from "./exceptions/methodNotAllowedError";
 import { NotFoundError } from "./exceptions/notFoundError";
 import globalErrorHandler from "./middlewares/errorHandler";
@@ -44,7 +46,12 @@ if (config.NODE_ENV === "development") {
 }
 
 app.use(compression());
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/" + config.API_PREFIX, router);
+app.use("/openapi.json", (_req: Request, res: Response) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {
