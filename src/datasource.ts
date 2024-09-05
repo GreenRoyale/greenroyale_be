@@ -1,16 +1,16 @@
+import config from "config";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import config from "./config";
 
-const isDevelopment = config.NODE_ENV === "development";
+const isDevelopment = config.get<string>("NODE_ENV") === "development";
 
 const AppDataSource = new DataSource({
   type: "postgres",
-  host: config.DB_HOST,
-  port: Number(config.DB_PORT) ?? 5432,
-  username: config.DB_USER,
-  password: config.DB_PASSWORD,
-  database: config.DB_NAME,
+  host: config.get<string>("DB_HOST"),
+  port: config.get<number>("DB_PORT") ?? 5432,
+  username: config.get<string>("DB_USER"),
+  password: config.get<string>("DB_PASSWORD"),
+  database: config.get<string>("DB_NAME"),
   synchronize: isDevelopment,
   logging: false,
   entities: ["src/entities/*.ts"],
