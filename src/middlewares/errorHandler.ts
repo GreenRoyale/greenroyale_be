@@ -1,6 +1,7 @@
+import config from "config";
 import { NextFunction, Request, Response } from "express";
-import config from "../../config/default";
-import { AppError, IResponseError } from "../exceptions/appError";
+import { AppError } from "../exceptions/appError";
+import { IResponseError } from "../interfaces";
 import log from "../utils/logger";
 
 export const sendErrorDev = (err: any, req: Request, res: Response) => {
@@ -47,7 +48,7 @@ const errorHandler = (
   err.statusCode = err.statusCode ?? 500;
   err.status = err.status ?? "error";
 
-  const env = config.NODE_ENV;
+  const env = config.get<string>("NODE_ENV");
 
   if (env === "development") {
     sendErrorDev(err, req, res);
