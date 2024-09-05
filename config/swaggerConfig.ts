@@ -1,6 +1,6 @@
+import config from "config";
 import swaggerJsdoc, { SwaggerDefinition } from "swagger-jsdoc";
-import { version } from "../../package.json";
-import config from "./index";
+import { version } from "../package.json";
 
 const swaggerDefinition: SwaggerDefinition = {
   openapi: "3.1.0",
@@ -11,7 +11,7 @@ const swaggerDefinition: SwaggerDefinition = {
   },
   servers: [
     {
-      url: `http://localhost:${config.PORT}/`,
+      url: `http://localhost:${config.get<number>("port")}/`,
       description: "Local server",
     },
   ],
@@ -40,7 +40,7 @@ const swaggerDefinition: SwaggerDefinition = {
     },
   ],
   externalDocs: {
-    url: config.SWAGGER_JSON_URL || "",
+    url: config.get<string>("swaggerUrl") || "",
   },
 };
 

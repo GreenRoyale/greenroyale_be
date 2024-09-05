@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import config from "../config";
+import config from "../../config/default";
 import { AppError, IResponseError } from "../exceptions/appError";
 import log from "../utils/logger";
 

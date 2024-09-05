@@ -1,4 +1,5 @@
 import compression from "compression";
+import config from "config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Express, NextFunction, Request, Response } from "express";
@@ -7,8 +8,7 @@ import hpp from "hpp";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 
-import config from "./config/index";
-import swaggerSpec from "./config/swaggerConfig";
+import swaggerSpec from "../config/swaggerConfig";
 import { MethodNotAllowedError } from "./exceptions/methodNotAllowedError";
 import { NotFoundError } from "./exceptions/notFoundError";
 import globalErrorHandler from "./middlewares/errorHandler";
@@ -41,13 +41,13 @@ app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(cookieParser());
 
-if (config.NODE_ENV === "development") {
+if (config.get<string>("NODE_ENV") === "development") {
   app.use(morgan("dev"));
 }
 
 app.use(compression());
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use("/" + config.API_PREFIX, router);
+app.use("/" + config.get<string>("prefix"), router);
 app.use("/openapi.json", (_req: Request, res: Response) => {
   res.setHeader("Content-Type", "application/json");
   res.send(swaggerSpec);

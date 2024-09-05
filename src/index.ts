@@ -1,12 +1,10 @@
-import "dotenv";
+import config from "config";
 import "reflect-metadata";
-
 import app from "./app";
-import config from "./config/index";
 import AppDataSource from "./datasource";
 import log from "./utils/logger";
 
-const port = config.PORT;
+const port = config.get<number>("port");
 
 AppDataSource.initialize()
   .then(async () => {
