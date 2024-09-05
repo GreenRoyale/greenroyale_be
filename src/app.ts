@@ -28,6 +28,7 @@ app.use(
       "Content-Type",
       "Authorization",
     ],
+    credentials: true,
   }),
 );
 
