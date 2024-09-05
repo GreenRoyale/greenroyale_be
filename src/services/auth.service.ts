@@ -3,7 +3,9 @@ import { EntityManager } from "typeorm";
 import AppDataSource from "../datasource";
 import { User } from "../entities/user.entity";
 import { ConflictError } from "../exceptions/conflictError";
+import { UnauthorizedError } from "../exceptions/unauthorizedError";
 import { IUserSignUp } from "../interfaces";
+import { ILoginSchema } from "../schemas/user";
 
 export class AuthService {
   public async createUser(
@@ -39,5 +41,20 @@ export class AuthService {
         return { user: newUser, message: "User created successfully" };
       },
     );
+  }
+
+  public async loginUser(
+    payload: ILoginSchema,
+  ): Promise<{ user: Partial<User>; message: string }> {
+    const { email, password } = payload;
+
+    const user = await User.findOne({ where: { email } });
+
+    if (!user || !(await argon.verify(user.password, password))) {
+      throw new UnauthorizedError("Incorrect email or password");
+    }
+
+    const { password: _, deleted_at: __, ...loggedInUser } = user;
+    return { user: loggedInUser, message: "Login successful" };
   }
 }

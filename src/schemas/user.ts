@@ -19,4 +19,10 @@ export const userSignUpSchema = z.object({
     .max(100, "Password can't exceed 100 characters"),
 });
 
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters long"),
+});
+
 export type IUserSignUpSchema = z.infer<typeof userSignUpSchema>;
+export type ILoginSchema = z.infer<typeof loginSchema>;
