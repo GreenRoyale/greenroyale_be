@@ -17,7 +17,7 @@ import { MethodNotAllowedError } from "./exceptions/methodNotAllowedError";
 import { NotFoundError } from "./exceptions/notFoundError";
 import globalErrorHandler from "./middlewares/errorHandler";
 import router from "./routes/index.route";
-import { emailQueue } from "./utils/queue.utils";
+import { emailQueue } from "./utils/queue";
 
 const app: Express = express();
 app.disable("x-powered-by");

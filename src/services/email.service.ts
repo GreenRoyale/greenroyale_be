@@ -1,7 +1,7 @@
 import nodemailer, { Transporter } from "nodemailer";
 import APP_CONFIG from "../../config/app.config";
 import { ClientError } from "../exceptions/clientError";
-import { IEmailData } from "../types";
+import { IEmailData } from "../interfaces";
 import log from "../utils/logger";
 
 export class EmailService {

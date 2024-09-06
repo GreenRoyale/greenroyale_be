@@ -9,3 +9,10 @@ export interface IResponseError {
   status: string;
   message: string;
 }
+
+export interface IEmailData {
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
+}
