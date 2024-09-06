@@ -1,7 +1,7 @@
 import { Column, Entity } from "typeorm";
 import ExtendedBaseEntity from "./base.entity";
 
-@Entity()
+@Entity({ name: "user_tbl" })
 class User extends ExtendedBaseEntity {
   @Column({ nullable: false })
   first_name: string;
