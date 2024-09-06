@@ -51,17 +51,3 @@ export class EmailService {
     }
   }
 }
-
-/**
- * const emailData = {
- *  to: "example@example.com",
- *  subject: "Reset your password",
- *  template: "reset-password",
- *  variables: {
- *    userName: "Fish Pie",
- *    resetLink: "https://example.com"
- * }
- * }
- *
- * await addEmailToQueue(emailData)
- */
