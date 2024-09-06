@@ -22,7 +22,7 @@ export interface IResponseMessage {
   message: string;
 }
 
-export type UserUpdatePayload = any & {
+export type UserUpdatePayload = IUserProfilePicturePayload & {
   photo: string;
 };
 

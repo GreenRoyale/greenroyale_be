@@ -1,7 +1,7 @@
 import Bull, { Job } from "bull";
 import APP_CONFIG from "../../config/app.config";
+import { IEmailData } from "../interfaces";
 import { EmailService } from "../services/email.service";
-import { IEmailData } from "../types";
 import log from "./logger";
 
 function asyncHandler(fn: (job: Job) => Promise<void>) {
