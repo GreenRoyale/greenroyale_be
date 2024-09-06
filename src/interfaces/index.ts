@@ -11,8 +11,21 @@ export interface IResponseError {
 }
 
 export interface IEmailData {
-  from: string;
   to: string;
   subject: string;
-  html: string;
+  template: string;
+  variables: Record<string, any>;
+}
+
+export interface IResponseMessage {
+  response_code: number;
+  message: string;
+}
+
+export type UserUpdatePayload = IUserProfilePicturePayload & {
+  photo: string;
+};
+
+export interface IUserProfilePicturePayload {
+  photo: string;
 }
