@@ -1,3 +1,5 @@
+import { IUpdateUserProfileSchema } from "../schemas/user";
+
 export interface IUserSignUp {
   first_name: string;
   last_name: string;
@@ -8,4 +10,22 @@ export interface IUserSignUp {
 export interface IResponseError {
   status: string;
   message: string;
+}
+
+export interface IEmailData {
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
+}
+
+export interface IResponseMessage {
+  response_code: number;
+  message: string;
+}
+
+export type UserUpdatePayload = IUpdateUserProfileSchema;
+
+export interface IUserProfilePicturePayload {
+  photo: string;
 }
