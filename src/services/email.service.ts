@@ -1,4 +1,6 @@
 import nodemailer, { Transporter } from "nodemailer";
+import path from "path";
+import pug from "pug";
 import APP_CONFIG from "../../config/app.config";
 import { ClientError } from "../exceptions/clientError";
 import { IEmailData } from "../types";
@@ -24,14 +26,20 @@ export class EmailService {
    * @returns A success message when email is sent
    */
   async sendmail(emailData: IEmailData): Promise<string> {
-    const mailOptions = {
-      from: APP_CONFIG.SMTP_FROM_ADDRESS,
-      to: emailData.to,
-      subject: emailData.subject,
-      text: emailData.html,
-    };
-
     try {
+      const templatePath = path.join(
+        __dirname,
+        "..",
+        "views/email",
+        `${emailData.template}.pug`,
+      );
+      const html = pug.renderFile(templatePath, emailData.variables);
+      const mailOptions = {
+        from: APP_CONFIG.SMTP_FROM_ADDRESS,
+        to: emailData.to,
+        subject: emailData.subject,
+        html,
+      };
       await this.transporter.sendMail(mailOptions);
       return `Email successfully sent to ${emailData.to}`;
     } catch (error) {
@@ -43,3 +51,17 @@ export class EmailService {
     }
   }
 }
+
+/**
+ * const emailData = {
+ *  to: "example@example.com",
+ *  subject: "Reset your password",
+ *  template: "reset-password",
+ *  variables: {
+ *    userName: "Fish Pie",
+ *    resetLink: "https://example.com"
+ * }
+ * }
+ *
+ * await addEmailToQueue(emailData)
+ */

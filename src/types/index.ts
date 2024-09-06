@@ -3,4 +3,6 @@ export interface IEmailData {
   to: string;
   subject: string;
   html: string;
+  template: string;
+  variables: Record<string, any>;
 }
