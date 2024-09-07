@@ -25,6 +25,10 @@ class User extends ExtendedBaseEntity {
   async isCorrectPassword(candidatePassword: string): Promise<boolean> {
     return argon.verify(this.password, candidatePassword);
   }
+
+  changedPasswordAfterTokenIssued(candidatePasswordVersion: number): boolean {
+    return this.password_version !== candidatePasswordVersion;
+  }
 }
 
 export { User };
