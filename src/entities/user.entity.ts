@@ -1,3 +1,4 @@
+import argon from "argon2";
 import { Column, Entity } from "typeorm";
 import ExtendedBaseEntity from "./base.entity";
 
@@ -17,6 +18,13 @@ class User extends ExtendedBaseEntity {
 
   @Column({ default: false })
   is_verified: boolean;
+
+  @Column({ type: "int", default: 1 })
+  password_version: number;
+
+  async isCorrectPassword(candidatePassword: string): Promise<boolean> {
+    return argon.verify(this.password, candidatePassword);
+  }
 }
 
 export { User };
