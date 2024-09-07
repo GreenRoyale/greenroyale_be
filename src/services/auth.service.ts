@@ -32,11 +32,13 @@ export class AuthService {
         user.password = hashedPassword;
         user.is_verified = false;
 
-        const createdUser = await createUserManager.save(user);
+        const newUser = await createUserManager.save(user);
 
         // TODO: send email notification
 
-        const { password: _, deleted_at: __, ...newUser } = createdUser;
+        delete user.password;
+        delete user.password_version;
+        delete user.deleted_at;
 
         return { user: newUser, message: "User created successfully" };
       },
@@ -50,11 +52,14 @@ export class AuthService {
 
     const user = await User.findOne({ where: { email } });
 
-    if (!user || !(await argon.verify(user.password, password))) {
+    if (!user || !(await user.isCorrectPassword(password))) {
       throw new UnauthorizedError("Incorrect email or password");
     }
 
-    const { password: _, deleted_at: __, ...loggedInUser } = user;
-    return { user: loggedInUser, message: "Login successful" };
+    delete user.password;
+    delete user.password_version;
+    delete user.deleted_at;
+
+    return { user, message: "Login successful" };
   }
 }

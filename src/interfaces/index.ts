@@ -1,3 +1,5 @@
+import { JwtPayload } from "jsonwebtoken";
+
 export interface IUserSignUp {
   first_name: string;
   last_name: string;
@@ -28,4 +30,9 @@ export type UserUpdatePayload = IUserProfilePicturePayload & {
 
 export interface IUserProfilePicturePayload {
   photo: string;
+}
+
+export interface CustomJwtPayload extends JwtPayload {
+  id: string;
+  password_version: number;
 }
