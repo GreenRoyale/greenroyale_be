@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  forgotPassword,
   loginUser,
   logoutUser,
   registerUser,
@@ -16,5 +17,6 @@ authRouter.post("/login", validateData(loginSchema), loginUser);
 authRouter.post("/verify-email", verifyEmail);
 authRouter.post("/resend-verification-email", resendVerificationEmail);
 authRouter.post("/logout", logoutUser);
+authRouter.post("/forgot-password", forgotPassword);
 
 export default authRouter;
