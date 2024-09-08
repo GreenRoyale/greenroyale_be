@@ -1,5 +1,6 @@
 import argon from "argon2";
-import { EntityManager } from "typeorm";
+import crypto from "crypto";
+import { EntityManager, MoreThan } from "typeorm";
 import AppDataSource from "../datasource";
 import { User } from "../entities/user.entity";
 import { ClientError } from "../exceptions/clientError";
@@ -163,5 +164,40 @@ export class AuthService {
     await addEmailToQueue(emailData);
 
     return { message: "Password reset link sent successfully" };
+  }
+
+  public async resetPassword(
+    token: string,
+    newPassword: string,
+  ): Promise<{ user: Partial<User>; message: string }> {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const hashedPassword = await argon.hash(newPassword);
+
+    const user = await User.findOne({
+      where: {
+        password_reset_token: hashedToken,
+        token_expiry: MoreThan(new Date()),
+      },
+    });
+
+    if (!user) {
+      throw new ClientError("Token is invalid or has expired");
+    }
+
+    user.password = hashedPassword;
+    user.password_reset_token = null;
+    user.token_expiry = null;
+    user.password_version += 1;
+
+    await user.save();
+
+    delete user.password;
+    delete user.password_version;
+    delete user.deleted_at;
+    delete user.verification_token;
+    delete user.password_reset_token;
+    delete user.token_expiry;
+
+    return { user, message: "Password reset successfully" };
   }
 }

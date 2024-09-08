@@ -71,3 +71,16 @@ export const forgotPassword = asyncHandler(
     });
   },
 );
+
+export const resetPassword = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+    const { user, message } = await authService.resetPassword(
+      token,
+      newPassword,
+    );
+
+    createSendToken(user, 200, message, req, res);
+  },
+);
