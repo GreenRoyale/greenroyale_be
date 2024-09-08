@@ -184,3 +184,46 @@ export const login = `
  *                         example: "Invalid email or password format"
  */
 `;
+
+export const verifyEmail = `
+/**
+ * @swagger
+ * /api/v1/verify-email:
+ *   post:
+ *     summary: Verify a user's email using a verification token
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Verification token sent to the user's email
+ *     responses:
+ *       200:
+ *         description: Email verified successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               example:
+ *                 status: success
+ *                 message: "Email verified successfully"
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized or expired token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid or expired verification token"
+ */
+
+`;

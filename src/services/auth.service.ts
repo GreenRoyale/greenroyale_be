@@ -6,6 +6,7 @@ import { ConflictError } from "../exceptions/conflictError";
 import { UnauthorizedError } from "../exceptions/unauthorizedError";
 import { IUserSignUp } from "../interfaces";
 import { ILoginSchema } from "../schemas/user";
+import { addEmailToQueue } from "../utils/queue";
 
 export class AuthService {
   public async createUser(
@@ -32,13 +33,29 @@ export class AuthService {
         user.password = hashedPassword;
         user.is_verified = false;
 
+        const verificationToken = user.generateToken("verification");
+
         const newUser = await createUserManager.save(user);
 
-        // TODO: send email notification
+        const emailData = {
+          to: newUser.email,
+          subject: "",
+          template: "verify-email",
+          variables: {
+            verificationToken,
+          },
+        };
 
-        delete user.password;
-        delete user.password_version;
-        delete user.deleted_at;
+        // FIXME: This won't work because there is no email template for it
+        // Comment this line out if you want to test the endpoint
+        await addEmailToQueue(emailData);
+
+        delete newUser.password;
+        delete newUser.password_version;
+        delete newUser.deleted_at;
+        delete newUser.verification_token;
+        delete newUser.password_reset_token;
+        delete newUser.token_expiry;
 
         return { user: newUser, message: "User created successfully" };
       },
@@ -59,7 +76,30 @@ export class AuthService {
     delete user.password;
     delete user.password_version;
     delete user.deleted_at;
+    delete user.verification_token;
+    delete user.password_reset_token;
+    delete user.token_expiry;
 
     return { user, message: "Login successful" };
+  }
+
+  public async verifyEmail(token: string): Promise<string> {
+    const user = await User.findOne({ where: { verification_token: token } });
+
+    if (!user) {
+      throw new UnauthorizedError("Invalid or expired verification token");
+    }
+
+    if (!user.isTokenValid("verification", token)) {
+      throw new UnauthorizedError("Verification token has expired");
+    }
+
+    user.is_verified = true;
+    user.verification_token = null;
+    user.token_expiry = null;
+
+    await user.save();
+
+    return "Email verified successfully";
   }
 }
