@@ -39,7 +39,7 @@ export class AuthService {
 
         const emailData = {
           to: newUser.email,
-          subject: "",
+          subject: "Verify your account",
           template: "verify-email",
           variables: {
             verificationToken,
@@ -101,5 +101,35 @@ export class AuthService {
     await user.save();
 
     return "Email verified successfully";
+  }
+
+  public async resendVerificationEmail(email: string): Promise<string> {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      throw new UnauthorizedError("User not found");
+    }
+
+    if (user.is_verified) {
+      throw new UnauthorizedError("User already verified");
+    }
+
+    const verificationToken = user.generateToken("verification");
+    await user.save();
+
+    const emailData = {
+      to: user.email,
+      subject: "Verify your account",
+      template: "verify-email",
+      variables: {
+        verificationToken,
+      },
+    };
+
+    // FIXME: This won't work because there is no email template for it
+    // Comment this line out if you want to test the endpoint
+    await addEmailToQueue(emailData);
+
+    return "Verification email has been resent";
   }
 }
