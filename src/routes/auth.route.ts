@@ -5,6 +5,7 @@ import {
   logoutUser,
   registerUser,
   resendVerificationEmail,
+  resetPassword,
   verifyEmail,
 } from "../controllers/auth.controller";
 import { validateData } from "../middlewares/validateData";
@@ -18,5 +19,6 @@ authRouter.post("/verify-email", verifyEmail);
 authRouter.post("/resend-verification-email", resendVerificationEmail);
 authRouter.post("/logout", logoutUser);
 authRouter.post("/forgot-password", forgotPassword);
+authRouter.post("/reset-password/:token", resetPassword);
 
 export default authRouter;
