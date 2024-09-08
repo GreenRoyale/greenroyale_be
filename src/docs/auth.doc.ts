@@ -227,3 +227,52 @@ export const verifyEmail = `
  */
 
 `;
+
+export const resendVerifyEmail = `
+/**
+ * @swagger
+ * /api/v1/auth/resend-verification-email:
+ *   post:
+ *     summary: Resend a verification email
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Email of the user requesting the verification email
+ *                 example: "jdoe@example.com"
+ *     responses:
+ *       200:
+ *         description: Verification email resent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: "Verification email has been resent"
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ */
+
+`;

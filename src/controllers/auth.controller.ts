@@ -1,4 +1,5 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { ClientError } from "../exceptions/clientError";
 import asyncHandler from "../middlewares/asyncHander";
 import { AuthService } from "../services/auth.service";
 import { createSendToken } from "../utils/createSendToken";
@@ -26,3 +27,20 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
     message,
   });
 });
+
+export const resendVerificationEmail = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+
+    if (!email) {
+      return next(new ClientError("Email required"));
+    }
+
+    const message = await authService.resendVerificationEmail(email);
+
+    res.status(200).json({
+      status: "success",
+      message,
+    });
+  },
+);
