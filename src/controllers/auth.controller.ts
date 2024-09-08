@@ -1,3 +1,4 @@
+import config from "config";
 import { NextFunction, Request, Response } from "express";
 import { ClientError } from "../exceptions/clientError";
 import asyncHandler from "../middlewares/asyncHander";
@@ -20,7 +21,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
 
 export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
   const token = req.query.token as string;
-  const message = await authService.verifyEmail(token);
+  const { message } = await authService.verifyEmail(token);
 
   res.status(200).json({
     status: "success",
@@ -36,7 +37,7 @@ export const resendVerificationEmail = asyncHandler(
       return next(new ClientError("Email required"));
     }
 
-    const message = await authService.resendVerificationEmail(email);
+    const { message } = await authService.resendVerificationEmail(email);
 
     res.status(200).json({
       status: "success",
@@ -57,3 +58,16 @@ export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
     message: "Logged out successfully",
   });
 });
+
+export const forgotPassword = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { email } = req.body;
+    const resetURL = `${req.protocol}://${req.get("host")}/${config.get<string>("prefix")}/auth/reset-password/`;
+    const { message } = await authService.forgotPassword(email, resetURL);
+
+    res.status(200).json({
+      status: "sucess",
+      message,
+    });
+  },
+);

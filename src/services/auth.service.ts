@@ -2,6 +2,7 @@ import argon from "argon2";
 import { EntityManager } from "typeorm";
 import AppDataSource from "../datasource";
 import { User } from "../entities/user.entity";
+import { ClientError } from "../exceptions/clientError";
 import { ConflictError } from "../exceptions/conflictError";
 import { UnauthorizedError } from "../exceptions/unauthorizedError";
 import { IUserSignUp } from "../interfaces";
@@ -83,7 +84,7 @@ export class AuthService {
     return { user, message: "Login successful" };
   }
 
-  public async verifyEmail(token: string): Promise<string> {
+  public async verifyEmail(token: string): Promise<{ message: string }> {
     const user = await User.findOne({ where: { verification_token: token } });
 
     if (!user) {
@@ -100,10 +101,12 @@ export class AuthService {
 
     await user.save();
 
-    return "Email verified successfully";
+    return { message: "Email verified successfully" };
   }
 
-  public async resendVerificationEmail(email: string): Promise<string> {
+  public async resendVerificationEmail(
+    email: string,
+  ): Promise<{ message: string }> {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -130,6 +133,35 @@ export class AuthService {
     // Comment this line out if you want to test the endpoint
     await addEmailToQueue(emailData);
 
-    return "Verification email has been resent";
+    return { message: "Verification email has been resent" };
+  }
+
+  public async forgotPassword(
+    email: string,
+    resetUrl: string,
+  ): Promise<{ message: string }> {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      throw new ClientError("User not found");
+    }
+
+    const resetToken = user.generateToken("password_reset");
+    await user.save();
+
+    const emailData = {
+      to: user.email,
+      subject: "Reset your password",
+      template: "password-reset",
+      variables: {
+        resetUrl: resetUrl + `${resetToken}`,
+      },
+    };
+
+    // FIXME: This won't work because there is no email template for it
+    // Comment this line out if you want to test the endpoint
+    await addEmailToQueue(emailData);
+
+    return { message: "Password reset link sent successfully" };
   }
 }
