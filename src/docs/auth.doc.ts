@@ -365,3 +365,80 @@ export const forgotPassword = `
  */
 
 `;
+
+export const resetPassword = `
+/**
+ * @swagger
+ * /api/v1/auth/reset-password/{token}:
+ *   post:
+ *     summary: Reset the user password using a reset token
+ *     description: This endpoint allows users to reset their password by providing a valid reset token and a new password.
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Password reset token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - newPassword
+ *             properties:
+ *               newPassword:
+ *                 type: string
+ *                 description: The new password for the account
+ *                 example: "newStrongPassword123"
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: "Password reset successfully"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: string
+ *                           example: "d91f-12345"
+ *                         first_name:
+ *                           type: string
+ *                           example: "John"
+ *                         last_name:
+ *                           type: string
+ *                           example: "Doe"
+ *                         email:
+ *                           type: string
+ *                           example: "jdoe@example.com"
+ *       400:
+ *         description: Invalid or expired token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: "Token is invalid or has expired"
+ */
+
+`;
