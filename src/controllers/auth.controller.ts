@@ -44,3 +44,16 @@ export const resendVerificationEmail = asyncHandler(
     });
   },
 );
+
+export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
+  res.cookie("refreshToken", "", {
+    httpOnly: true,
+    expires: new Date(0),
+    secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+  });
+
+  res.status(200).json({
+    status: "success",
+    message: "Logged out successfully",
+  });
+});
