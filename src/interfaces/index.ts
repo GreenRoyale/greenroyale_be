@@ -1,5 +1,7 @@
 import { IUpdateUserProfileSchema } from "../schemas/user";
 
+import { JwtPayload } from "jsonwebtoken";
+
 export interface IUserSignUp {
   first_name: string;
   last_name: string;
@@ -13,10 +15,10 @@ export interface IResponseError {
 }
 
 export interface IEmailData {
-  from: string;
   to: string;
   subject: string;
-  html: string;
+  template: string;
+  variables: Record<string, any>;
 }
 
 export interface IResponseMessage {
@@ -24,7 +26,23 @@ export interface IResponseMessage {
   message: string;
 }
 
-export type UserUpdatePayload = IUpdateUserProfileSchema;
+export interface IUserProfilePicturePayload {
+  photo: string;
+}
+
+export interface CustomJwtPayload extends JwtPayload {
+  id: string;
+  password_version: number;
+}
+
+export interface IResponseMessage {
+  response_code: number;
+  message: string;
+}
+
+export type UserUpdatePayload = IUpdateUserProfileSchema & {
+  photo?: string;
+};
 
 export interface IUserProfilePicturePayload {
   photo: string;

@@ -184,3 +184,261 @@ export const login = `
  *                         example: "Invalid email or password format"
  */
 `;
+
+export const verifyEmail = `
+/**
+ * @swagger
+ * /api/v1/verify-email:
+ *   post:
+ *     summary: Verify a user's email using a verification token
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Verification token sent to the user's email
+ *     responses:
+ *       200:
+ *         description: Email verified successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               example:
+ *                 status: success
+ *                 message: "Email verified successfully"
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized or expired token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid or expired verification token"
+ */
+
+`;
+
+export const resendVerifyEmail = `
+/**
+ * @swagger
+ * /api/v1/auth/resend-verification-email:
+ *   post:
+ *     summary: Resend a verification email
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Email of the user requesting the verification email
+ *                 example: "jdoe@example.com"
+ *     responses:
+ *       200:
+ *         description: Verification email resent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: "Verification email has been resent"
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ */
+
+`;
+
+export const logout = `
+/**
+ * @swagger
+ * /api/v1/auth/logout:
+ *   post:
+ *     summary: Log out the user
+ *     tags: [Authentication]
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: Logged out successfully
+ *       400:
+ *         description: Bad request
+ */
+
+`;
+
+export const forgotPassword = `
+/**
+ * @swagger
+ * /api/v1/auth/forgot-password:
+ *   post:
+ *     summary: Request a password reset
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: User's email address
+ *                 example: "johndoe@example.com"
+ *     responses:
+ *       200:
+ *         description: Password reset link sent to email
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: "Password reset link sent successfully"
+ *       404:
+ *         description: User with the given email not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: "There was an error sending the email. Try again later!"
+ */
+
+`;
+
+export const resetPassword = `
+/**
+ * @swagger
+ * /api/v1/auth/reset-password/{token}:
+ *   post:
+ *     summary: Reset the user password using a reset token
+ *     description: This endpoint allows users to reset their password by providing a valid reset token and a new password.
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Password reset token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - newPassword
+ *             properties:
+ *               newPassword:
+ *                 type: string
+ *                 description: The new password for the account
+ *                 example: "newStrongPassword123"
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 message:
+ *                   type: string
+ *                   example: "Password reset successfully"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: string
+ *                           example: "d91f-12345"
+ *                         first_name:
+ *                           type: string
+ *                           example: "John"
+ *                         last_name:
+ *                           type: string
+ *                           example: "Doe"
+ *                         email:
+ *                           type: string
+ *                           example: "jdoe@example.com"
+ *       400:
+ *         description: Invalid or expired token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: "Token is invalid or has expired"
+ */
+
+`;

@@ -40,7 +40,8 @@ export class UserService {
       throw new NotFoundError("User not found");
     }
 
-    const updateResponse = await this.updateUser(userId, {});
+    const updateResponse = await this.updateUser(userId, payload);
+
     if (!updateResponse) {
       throw new ClientError("Error occured updating user profile picture");
     }

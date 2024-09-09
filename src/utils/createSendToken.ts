@@ -10,13 +10,23 @@ export const createSendToken = (
   req: Request,
   res: Response,
 ) => {
-  const accessToken = signToken(user.id, "accessTokenPrivateKey", {
-    expiresIn: config.get<string>("accessTokenTtl"),
-  });
+  const accessToken = signToken(
+    user.id,
+    user.password_version,
+    "accessTokenPrivateKey",
+    {
+      expiresIn: config.get<string>("accessTokenTtl"),
+    },
+  );
 
-  const refreshToken = signToken(user.id, "refreshTokenPrivateKey", {
-    expiresIn: config.get<string>("refreshTokenTtl"),
-  });
+  const refreshToken = signToken(
+    user.id,
+    user.password_version,
+    "refreshTokenPrivateKey",
+    {
+      expiresIn: config.get<string>("refreshTokenTtl"),
+    },
+  );
 
   const expiresInDays = Number(config.get<string>("cookieExpires"));
 
@@ -28,7 +38,7 @@ export const createSendToken = (
     secure: req.secure || req.headers["x-forwarded-proto"] === "https",
   };
 
-  res.cookie("refresh-token", refreshToken, cookieOptions);
+  res.cookie("refreshToken", refreshToken, cookieOptions);
 
   res.status(statusCode).json({
     status: "success",
