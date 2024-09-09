@@ -1,7 +1,15 @@
+import config from "config";
 import { NextFunction, Request, Response } from "express";
-import config from "../../config/default";
-import { AppError, IResponseError } from "../exceptions/appError";
+import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import { AppError } from "../exceptions/appError";
+import { IResponseError } from "../interfaces";
 import log from "../utils/logger";
+
+const handleJWTError = (err: any) =>
+  new AppError(`${err.message}!. Please log in again`, 401);
+
+const handleJWTExpiredError = () =>
+  new AppError("Your token has expired! Please log in again", 401);
 
 export const sendErrorDev = (err: any, req: Request, res: Response) => {
   if (req.originalUrl.startsWith("/api")) {
@@ -47,11 +55,13 @@ const errorHandler = (
   err.statusCode = err.statusCode ?? 500;
   err.status = err.status ?? "error";
 
-  const env = config.NODE_ENV;
+  const env = config.get<string>("NODE_ENV");
 
   if (env === "development") {
     sendErrorDev(err, req, res);
   } else if (env === "production") {
+    if (err instanceof JsonWebTokenError) err = handleJWTError(err);
+    if (err instanceof TokenExpiredError) err = handleJWTExpiredError();
     sendErrorProd(err, req, res);
   }
 };
