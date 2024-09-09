@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default {
-  port: Number(process.env.PORT) ?? 8000,
+  port: process.env.PORT ?? 8000,
   NODE_ENV: process.env.NODE_ENV,
   prefix: process.env.API_PREFIX ?? "api/v1",
 
@@ -23,12 +23,4 @@ export default {
 
   cookieExpires: process.env.JWT_COOKIE_EXPIRES_IN,
   swaggerUrl: process.env.SWAGGER_JSON_URL,
-
-  SMTP_FROM_ADDRESS: process.env.SMTP_FROM_ADDRESS,
-  SMTP_HOST: process.env.SMTP_HOST,
-  SMTP_PORT: Number(process.env.SMTP_PORT),
-  SMTP_SECURE: process.env.SMTP_SECURE,
-  SMTP_USER: process.env.SMTP_USER,
-  SMTP_PASSWORD: process.env.SMTP_PASSWORD,
-  BULL_BOARD_PASSWORD: process.env.BULL_BOARD_PASSWORD,
 };
