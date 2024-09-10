@@ -28,7 +28,6 @@ export class BaseReponseHandler {
   ) {
     const response = {
       status: HTTP_STATUS_CODE[statusCode as keyof typeof HTTP_STATUS_CODE],
-      // statusCode: statusCode,
       message: message,
       data,
     };
