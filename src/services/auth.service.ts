@@ -106,13 +106,9 @@ export class AuthService {
   }
 
   public async resendVerificationEmail(
-    email: string,
+    userId: string,
   ): Promise<{ message: string }> {
-    const user = await User.findOne({ where: { email } });
-
-    if (!user) {
-      throw new UnauthorizedError("User not found");
-    }
+    const user = await User.findOne({ where: { id: userId } });
 
     if (user.is_verified) {
       throw new UnauthorizedError("User already verified");
