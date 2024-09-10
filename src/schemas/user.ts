@@ -12,20 +12,28 @@ const lastNameSchema = z
   .min(1, "Last name is required")
   .max(100, "Last name can't exceed 100 characters");
 
+const emailSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .email("Invalid email address");
+
+const passwordSchema = z
+  .string()
+  .trim()
+  .min(8, "Password must be at least 8 characters")
+  .max(100, "Password can't exceed 100 characters");
+
 export const userSignUpSchema = z.object({
   first_name: firstNameSchema,
   last_name: lastNameSchema,
-  email: z.string().trim().toLowerCase().email("Invalid email address"),
-  password: z
-    .string()
-    .trim()
-    .min(8, "Password must be at least 8 characters")
-    .max(100, "Password can't exceed 100 characters"),
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 export const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 export const updateProfilePictureSchema = z.object({
@@ -37,9 +45,15 @@ export const updateUserProfileSchema = z.object({
   last_name: lastNameSchema,
 });
 
+export const updatePasswordSchema = z.object({
+  current_password: passwordSchema,
+  new_password: passwordSchema,
+});
+
 export type IUserSignUpSchema = z.infer<typeof userSignUpSchema>;
 export type ILoginSchema = z.infer<typeof loginSchema>;
 export type IUpdateUserProfileSchema = z.infer<typeof updateUserProfileSchema>;
 export type IUpdateProfilePictureSchema = z.infer<
   typeof updateProfilePictureSchema
 >;
+export type IUpdatePasswordSchema = z.infer<typeof updatePasswordSchema>;
