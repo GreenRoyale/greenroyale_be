@@ -1,7 +1,11 @@
+import argon from "argon2";
 import { User } from "../entities/user.entity";
 import { ClientError } from "../exceptions/clientError";
+import { ConflictError } from "../exceptions/conflictError";
 import { NotFoundError } from "../exceptions/notFoundError";
+import { UnauthorizedError } from "../exceptions/unauthorizedError";
 import { IUserProfilePicturePayload, UserUpdatePayload } from "../interfaces";
+import { IUpdatePasswordSchema } from "../schemas/user";
 
 export class UserService {
   async fetchUserRecord(
@@ -22,6 +26,7 @@ export class UserService {
     }
     return user;
   }
+
   private async updateUser(
     userId: string,
     updatePayload: UserUpdatePayload,
@@ -55,5 +60,40 @@ export class UserService {
     userId: string;
   }): Promise<User> {
     return this.updateUser(userId, payload);
+  }
+
+  public async updateUserPassword(
+    userId: string,
+    payload: IUpdatePasswordSchema,
+  ): Promise<{ user: Partial<User>; message: string }> {
+    const user = await User.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    const { current_password, new_password } = payload;
+
+    const isCurrentPasswordCorrect =
+      await user.isCorrectPassword(current_password);
+    if (!isCurrentPasswordCorrect) {
+      throw new UnauthorizedError("Your current password is incorrect");
+    }
+
+    const isSameAsOldPassword = await user.isCorrectPassword(new_password);
+    if (isSameAsOldPassword) {
+      throw new ConflictError(
+        "Your new password cannot be the same as old password",
+      );
+    }
+    const hashedPassword = await argon.hash(new_password);
+
+    user.password = hashedPassword;
+    user.password_version += 1;
+    await user.save();
+
+    return { user, message: "Password updated successfully" };
   }
 }
