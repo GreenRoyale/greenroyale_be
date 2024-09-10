@@ -235,6 +235,8 @@ export const resendVerifyEmail = `
  *   post:
  *     summary: Resend a verification email
  *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []  # Specify that authentication is required
  *     requestBody:
  *       required: true
  *       content:
@@ -261,7 +263,7 @@ export const resendVerifyEmail = `
  *                   type: string
  *                   example: "Verification email has been resent"
  *       401:
- *         description: User already verified
+ *         description: Unauthorized. User is not authenticated or already verified.
  *         content:
  *           application/json:
  *             schema:
@@ -272,9 +274,8 @@ export const resendVerifyEmail = `
  *                   example: error
  *                 message:
  *                   type: string
- *                   example: "User already verified"
+ *                   example: "User already verified or unauthorized"
  */
-
 `;
 
 export const logout = `
