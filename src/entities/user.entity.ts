@@ -1,4 +1,12 @@
 import argon from "argon2";
+import {
+  IsBoolean,
+  IsEmail,
+  IsInt,
+  IsOptional,
+  IsString,
+  ValidateIf,
+} from "class-validator";
 import crypto from "crypto";
 import { Column, Entity } from "typeorm";
 import ExtendedBaseEntity from "./base.entity";
@@ -6,30 +14,40 @@ import ExtendedBaseEntity from "./base.entity";
 @Entity({ name: "user_tbl" })
 class User extends ExtendedBaseEntity {
   @Column({ nullable: false })
+  @IsString()
   first_name: string;
 
   @Column({ nullable: false })
+  @IsString()
   last_name: string;
 
   @Column({ unique: true, nullable: false })
+  @IsEmail()
   email: string;
 
   @Column({ nullable: false })
+  @IsString()
   password: string;
 
   @Column({ default: false })
+  @IsBoolean()
   is_verified: boolean;
 
   @Column({ type: "int", default: 1 })
+  @IsInt()
   password_version: number;
 
   @Column({ nullable: true })
+  @ValidateIf((o) => !o.is_verified)
+  @IsOptional()
   verification_token: string | null;
 
   @Column({ nullable: true })
+  @IsOptional()
   password_reset_token: string | null;
 
   @Column({ type: "timestamp", nullable: true })
+  @IsOptional()
   token_expiry: Date | null;
 
   async isCorrectPassword(candidatePassword: string): Promise<boolean> {

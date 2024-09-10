@@ -33,6 +33,7 @@ export class AuthService {
         user.last_name = last_name;
         user.email = email;
         user.password = hashedPassword;
+        user.password_version = 1;
         user.is_verified = false;
 
         const verificationToken = user.generateToken("verification");
@@ -86,7 +87,10 @@ export class AuthService {
   }
 
   public async verifyEmail(token: string): Promise<{ message: string }> {
-    const user = await User.findOne({ where: { verification_token: token } });
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const user = await User.findOne({
+      where: { verification_token: hashedToken },
+    });
 
     if (!user) {
       throw new UnauthorizedError("Invalid or expired verification token");
@@ -111,7 +115,7 @@ export class AuthService {
     const user = await User.findOne({ where: { id: userId } });
 
     if (user.is_verified) {
-      throw new UnauthorizedError("User already verified");
+      throw new ConflictError("User already verified");
     }
 
     const verificationToken = user.generateToken("verification");

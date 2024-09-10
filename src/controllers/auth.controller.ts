@@ -1,5 +1,6 @@
 import config from "config";
 import { NextFunction, Request, Response } from "express";
+import { UnauthorizedError } from "../exceptions/unauthorizedError";
 import asyncHandler from "../middlewares/asyncHander";
 import { AuthService } from "../services/auth.service";
 import { createSendToken } from "../utils/createSendToken";
@@ -30,6 +31,13 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
 
 export const resendVerificationEmail = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user || !req.user.id) {
+      return next(
+        new UnauthorizedError(
+          "You are not logged in. Please log in to access this route.",
+        ),
+      );
+    }
     const userId = req.user.id;
 
     const { message } = await authService.resendVerificationEmail(userId);

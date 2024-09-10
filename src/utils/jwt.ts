@@ -5,7 +5,6 @@ import log from "./logger";
 
 export const signToken = (
   id: string,
-  passwordVersion: number,
   keyName: "accessTokenPrivateKey" | "refreshTokenPrivateKey",
   options?: SignOptions | undefined,
 ) => {
@@ -14,7 +13,7 @@ export const signToken = (
     "base64",
   ).toString("ascii");
 
-  return sign({ id, passwordVersion }, signingKey, {
+  return sign({ id }, signingKey, {
     ...(options && options),
     algorithm: "RS256",
   });

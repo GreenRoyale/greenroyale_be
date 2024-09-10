@@ -39,12 +39,9 @@ const refreshAccessToken = async (
 
   if (!user) return false;
 
-  const accessToken = signToken(
-    user.id,
-    user.password_version,
-    "accessTokenPrivateKey",
-    { expiresIn: config.get<string>("accessTokenTtl") },
-  );
+  const accessToken = signToken(user.id, "accessTokenPrivateKey", {
+    expiresIn: config.get<string>("accessTokenTtl"),
+  });
 
   return accessToken;
 };
@@ -61,7 +58,9 @@ export const deserializeUser = asyncHandler(
       const currentUser = await checkUserExists(decoded.id);
 
       if (
-        currentUser.changedPasswordAfterTokenIssued(decoded.password_version)
+        currentUser.changedPasswordAfterTokenIssued(
+          currentUser.password_version,
+        )
       ) {
         return next(
           new UnauthorizedError(

@@ -188,8 +188,8 @@ export const login = `
 export const verifyEmail = `
 /**
  * @swagger
- * /api/v1/verify-email:
- *   post:
+ * /api/v1/auth/verify-email:
+ *   get:
  *     summary: Verify a user's email using a verification token
  *     tags: [Authentication]
  *     parameters:
@@ -236,18 +236,7 @@ export const resendVerifyEmail = `
  *     summary: Resend a verification email
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []  # Specify that authentication is required
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 description: Email of the user requesting the verification email
- *                 example: "jdoe@example.com"
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Verification email resent successfully
@@ -262,8 +251,8 @@ export const resendVerifyEmail = `
  *                 message:
  *                   type: string
  *                   example: "Verification email has been resent"
- *       401:
- *         description: Unauthorized. User is not authenticated or already verified.
+ *       409:
+ *         description: Conflict. User is already verified.
  *         content:
  *           application/json:
  *             schema:
@@ -274,7 +263,7 @@ export const resendVerifyEmail = `
  *                   example: error
  *                 message:
  *                   type: string
- *                   example: "User already verified or unauthorized"
+ *                   example: "User already verified"
  */
 `;
 
