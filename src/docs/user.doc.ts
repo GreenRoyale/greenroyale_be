@@ -13,7 +13,7 @@ export const updateProfilePictureSchema = `
  *           description: The URL of the new profile picture.
  *           example: "https://example.com/avatar.jpg"
  *
- * /user/profile-picture:
+ * api/v1/user/profile-picture:
  *   patch:
  *     summary: Update user's profile picture
  *     security:
@@ -77,7 +77,7 @@ export const updateUserProfileSchema = `
  *           description: Last name of the user
  *           example: "Doe"
  *
- * /user/profile:
+ * api/v1/user/profile:
  *   patch:
  *     summary: Update user's profile information
  *     security:
