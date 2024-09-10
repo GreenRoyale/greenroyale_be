@@ -124,34 +124,40 @@ export const updateUserProfileSchema = `
  */
 `;
 
-export const updateUserPassword = `
+export const updateUserPasswordSchema = `
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     UpdateUserPassword:
+ *       type: object
+ *       required:
+ *         - current_password
+ *         - new_password
+ *       properties:
+ *         current_password:
+ *           type: string
+ *           description: The user's current password
+ *           example: "oldpassword123"
+ *         new_password:
+ *           type: string
+ *           description: The new password for the user, must be different from the current password
+ *           example: "newpassword456"
+ *
  * /api/v1/users/update-password:
  *   patch:
  *     summary: Update the current user's password
- *     description: Allows the currently authenticated user to update their password. The current password must be provided and must match the existing one. The new password must be provided and cannot be the same as the old password.
- *     tags: [User]
+ *     description: Allows the currently authenticated user to update their password
  *     security:
  *       - bearerAuth: []
+ *     tags:
+ *       - Users
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - current_password
- *               - new_password
- *             properties:
- *               current_password:
- *                 type: string
- *                 description: The user's current password.
- *                 example: "oldpassword123"
- *               new_password:
- *                 type: string
- *                 description: The new password for the user. It cannot be the same as the current password.
- *                 example: "newpassword456"
+ *             $ref: '#/components/schemas/UpdateUserPassword'
  *     responses:
  *       200:
  *         description: Password updated successfully, and a new token is returned.
@@ -223,7 +229,6 @@ export const updateUserPassword = `
  *                     properties:
  *                       message:
  *                         type: string
- *                         example: "new_password is Password must be at least 8 characters"
+ *                         example: "new_password must be at least 8 characters"
  */
-
 `;
