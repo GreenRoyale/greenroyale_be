@@ -1,6 +1,7 @@
 import argon from "argon2";
 import { User } from "../entities/user.entity";
 import { ClientError } from "../exceptions/clientError";
+import { ConflictError } from "../exceptions/conflictError";
 import { NotFoundError } from "../exceptions/notFoundError";
 import { UnauthorizedError } from "../exceptions/unauthorizedError";
 import { IUserProfilePicturePayload, UserUpdatePayload } from "../interfaces";
@@ -83,7 +84,7 @@ export class UserService {
 
     const isSameAsOldPassword = await user.isCorrectPassword(new_password);
     if (isSameAsOldPassword) {
-      throw new ClientError(
+      throw new ConflictError(
         "Your new password cannot be the same as old password",
       );
     }

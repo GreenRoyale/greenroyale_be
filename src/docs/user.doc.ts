@@ -13,7 +13,7 @@ export const updateProfilePictureSchema = `
  *           description: The URL of the new profile picture.
  *           example: "https://example.com/avatar.jpg"
  *
- * api/v1/user/profile-picture:
+ * /api/v1/users/profile-picture:
  *   patch:
  *     summary: Update user's profile picture
  *     security:
@@ -77,7 +77,7 @@ export const updateUserProfileSchema = `
  *           description: Last name of the user
  *           example: "Doe"
  *
- * api/v1/user/profile:
+ * /api/v1/users/profile:
  *   patch:
  *     summary: Update user's profile information
  *     security:
@@ -122,4 +122,108 @@ export const updateUserProfileSchema = `
  *       500:
  *         description: Internal server error
  */
+`;
+
+export const updateUserPassword = `
+/**
+ * @swagger
+ * /api/v1/users/update-password:
+ *   patch:
+ *     summary: Update the current user's password
+ *     description: Allows the currently authenticated user to update their password. The current password must be provided and must match the existing one. The new password must be provided and cannot be the same as the old password.
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - current_password
+ *               - new_password
+ *             properties:
+ *               current_password:
+ *                 type: string
+ *                 description: The user's current password.
+ *                 example: "oldpassword123"
+ *               new_password:
+ *                 type: string
+ *                 description: The new password for the user. It cannot be the same as the current password.
+ *                 example: "newpassword456"
+ *     responses:
+ *       200:
+ *         description: Password updated successfully, and a new token is returned.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "success"
+ *                 message:
+ *                   type: string
+ *                   example: "Password updated successfully"
+ *                 token:
+ *                   type: string
+ *                   description: JWT token for the updated session.
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR..."
+ *       401:
+ *         description: Unauthorized, user is not logged in or token is invalid.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "fail"
+ *                 message:
+ *                   type: string
+ *                   example: "You are not logged in. Please log in to access this route."
+ *       404:
+ *         description: User not found, the user ID does not exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "fail"
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ *       409:
+ *         description: Conflict, user tried to use the same old password as the new password.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "fail"
+ *                 message:
+ *                   type: string
+ *                   example: "Your new password cannot be the same as your old password."
+ *       422:
+ *         description: Validation error, password format does not meet the requirements.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       message:
+ *                         type: string
+ *                         example: "new_password is Password must be at least 8 characters"
+ */
+
 `;
