@@ -1,6 +1,5 @@
 import config from "config";
 import { NextFunction, Request, Response } from "express";
-import { ClientError } from "../exceptions/clientError";
 import asyncHandler from "../middlewares/asyncHander";
 import { AuthService } from "../services/auth.service";
 import { createSendToken } from "../utils/createSendToken";
@@ -31,13 +30,9 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
 
 export const resendVerificationEmail = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email } = req.body;
+    const userId = req.user.id;
 
-    if (!email) {
-      return next(new ClientError("Email required"));
-    }
-
-    const { message } = await authService.resendVerificationEmail(email);
+    const { message } = await authService.resendVerificationEmail(userId);
 
     res.status(200).json({
       status: "success",

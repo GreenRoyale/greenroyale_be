@@ -260,8 +260,8 @@ export const resendVerifyEmail = `
  *                 message:
  *                   type: string
  *                   example: "Verification email has been resent"
- *       404:
- *         description: User not found
+ *       401:
+ *         description: User already verified
  *         content:
  *           application/json:
  *             schema:
@@ -272,7 +272,7 @@ export const resendVerifyEmail = `
  *                   example: error
  *                 message:
  *                   type: string
- *                   example: "User not found"
+ *                   example: "User already verified"
  */
 
 `;
