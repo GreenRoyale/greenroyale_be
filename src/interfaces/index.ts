@@ -1,3 +1,5 @@
+import { IUpdateUserProfileSchema } from "../schemas/user";
+
 import { JwtPayload } from "jsonwebtoken";
 
 export interface IUserSignUp {
@@ -24,10 +26,6 @@ export interface IResponseMessage {
   message: string;
 }
 
-export type UserUpdatePayload = IUserProfilePicturePayload & {
-  photo: string;
-};
-
 export interface IUserProfilePicturePayload {
   photo: string;
 }
@@ -35,4 +33,17 @@ export interface IUserProfilePicturePayload {
 export interface CustomJwtPayload extends JwtPayload {
   id: string;
   password_version: number;
+}
+
+export interface IResponseMessage {
+  response_code: number;
+  message: string;
+}
+
+export type UserUpdatePayload = IUpdateUserProfileSchema & {
+  photo?: string;
+};
+
+export interface IUserProfilePicturePayload {
+  photo: string;
 }

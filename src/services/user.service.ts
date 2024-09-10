@@ -17,15 +17,22 @@ export class UserService {
       throw new ClientError("Invalid type provided");
     }
 
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
     return user;
   }
-  private async updateUser(userId: string, updatePayload: UserUpdatePayload) {
+  private async updateUser(
+    userId: string,
+    updatePayload: UserUpdatePayload,
+  ): Promise<User> {
     const user = await this.fetchUserRecord(userId, "userId");
-    if (!user) {
-      return null;
-    }
     Object.assign(user, updatePayload);
-    return await user.save();
+    try {
+      return await user.save();
+    } catch (error) {
+      throw new ClientError("Error saving user data");
+    }
   }
 
   async updateUserProfilePicture({
@@ -34,17 +41,10 @@ export class UserService {
   }: {
     payload: IUserProfilePicturePayload;
     userId: string;
-  }) {
-    const user = this.fetchUserRecord(userId, "userId");
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-
-    const updateResponse = await this.updateUser(userId, payload);
-    if (!updateResponse) {
-      throw new ClientError("Error occured updating user profile picture");
-    }
-    return updateResponse;
+  }): Promise<User> {
+    return await this.updateUser(userId, {
+      photo: payload.photo,
+    });
   }
 
   async updateUserProfile({
@@ -53,10 +53,7 @@ export class UserService {
   }: {
     payload: any;
     userId: string;
-  }) {
-    const user = this.updateUser(userId, payload);
-    if (!user) {
-      throw new NotFoundError("");
-    }
+  }): Promise<User> {
+    return this.updateUser(userId, payload);
   }
 }
