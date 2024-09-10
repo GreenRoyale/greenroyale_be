@@ -1,11 +1,11 @@
 const HTTP_STATUS_CODE = {
-  200: "Success",
-  201: "Created",
-  400: "Bad Request",
-  401: "Authentication Error",
-  404: "Not Found",
-  422: "Unprocessable Entity",
-  500: "Server Error",
+  200: "SUCCESSS",
+  201: "CREATED",
+  400: "BAD REQUEST",
+  401: "AUTHENTICATION ERROR",
+  404: "NOT FOUND",
+  422: "UNPROCESSABLE ENTITY",
+  500: "SERVER ERROR",
 } as const;
 
 export default HTTP_STATUS_CODE;

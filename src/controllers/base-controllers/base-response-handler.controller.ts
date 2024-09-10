@@ -11,7 +11,10 @@ export class BaseReponseHandler {
     data?: Record<string, any>,
   ) {
     const response = {
-      status: HTTP_STATUS_CODE[statusCode as keyof typeof HTTP_STATUS_CODE],
+      status:
+        HTTP_STATUS_CODE[
+          statusCode as keyof typeof HTTP_STATUS_CODE
+        ].toLowerCase(),
       message: responseMessage.message,
       statusCode,
       data,
@@ -27,7 +30,10 @@ export class BaseReponseHandler {
     statusCode: number = 200,
   ) {
     const response = {
-      status: HTTP_STATUS_CODE[statusCode as keyof typeof HTTP_STATUS_CODE],
+      status:
+        HTTP_STATUS_CODE[
+          statusCode as keyof typeof HTTP_STATUS_CODE
+        ].toLowerCase(),
       message: message,
       data,
     };
