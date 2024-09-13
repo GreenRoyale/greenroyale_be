@@ -36,12 +36,15 @@ describe("AuthService", () => {
 
       (argon.hash as jest.Mock).mockResolvedValueOnce("hashedPassword");
 
-      const result = await authService.createUser({
-        first_name: "John",
-        last_name: "Doe",
-        email: "jdoe@example.com",
-        password: "password123",
-      });
+      const result = await authService.createUser(
+        {
+          first_name: "John",
+          last_name: "Doe",
+          email: "jdoe@example.com",
+          password: "password123",
+        },
+        "",
+      );
 
       expect(result.user.first_name).toBe("John");
       expect(result.user.email).toBe("jdoe@example.com");
@@ -56,12 +59,15 @@ describe("AuthService", () => {
       } as User);
 
       await expect(
-        authService.createUser({
-          first_name: "John",
-          last_name: "Doe",
-          email: "jdoe@example.com",
-          password: "password123",
-        }),
+        authService.createUser(
+          {
+            first_name: "John",
+            last_name: "Doe",
+            email: "jdoe@example.com",
+            password: "password123",
+          },
+          "",
+        ),
       ).rejects.toThrow(ConflictError);
 
       expect(mockEntityManager.findOne).toHaveBeenCalledWith(User, {
