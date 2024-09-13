@@ -13,6 +13,7 @@ import { addEmailToQueue } from "../utils/queue";
 export class AuthService {
   public async createUser(
     payload: IUserSignUp,
+    verificationUrl: string,
   ): Promise<{ user: Partial<User>; message: string }> {
     const { first_name, last_name, email, password } = payload;
 
@@ -45,12 +46,11 @@ export class AuthService {
           subject: "Verify your account",
           template: "verify-email",
           variables: {
-            verificationToken,
+            firstName: newUser.first_name,
+            verificationUrl: verificationUrl + `${verificationToken}`,
           },
         };
 
-        // FIXME: This won't work because there is no email template for it
-        // Comment this line out if you want to test the endpoint
         await addEmailToQueue(emailData);
 
         delete newUser.password;
@@ -111,6 +111,7 @@ export class AuthService {
 
   public async resendVerificationEmail(
     userId: string,
+    verificationUrl: string,
   ): Promise<{ message: string }> {
     const user = await User.findOne({ where: { id: userId } });
 
@@ -126,12 +127,10 @@ export class AuthService {
       subject: "Verify your account",
       template: "verify-email",
       variables: {
-        verificationToken,
+        firstName: user.first_name,
+        verificationUrl: verificationUrl + `${verificationToken}`,
       },
     };
-
-    // FIXME: This won't work because there is no email template for it
-    // Comment this line out if you want to test the endpoint
     await addEmailToQueue(emailData);
 
     return { message: "Verification email has been resent" };
@@ -155,12 +154,10 @@ export class AuthService {
       subject: "Reset your password",
       template: "password-reset",
       variables: {
+        firstName: user.first_name,
         resetUrl: resetUrl + `${resetToken}`,
       },
     };
-
-    // FIXME: This won't work because there is no email template for it
-    // Comment this line out if you want to test the endpoint
     await addEmailToQueue(emailData);
 
     return { message: "Password reset link sent successfully" };

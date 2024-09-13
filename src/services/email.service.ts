@@ -1,4 +1,4 @@
-import nodemailer, { Transporter } from "nodemailer";
+import nodemailer, { SendMailOptions, Transporter } from "nodemailer";
 import path from "path";
 import pug from "pug";
 import APP_CONFIG from "../../config/app.config";
@@ -10,7 +10,7 @@ export class EmailService {
   private transporter: Transporter;
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: APP_CONFIG.SMTP_FROM_ADDRESS,
+      host: APP_CONFIG.SMTP_HOST,
       port: APP_CONFIG.SMTP_PORT,
       secure: APP_CONFIG.SMTP_SECURE,
       auth: {
@@ -30,11 +30,11 @@ export class EmailService {
       const templatePath = path.join(
         __dirname,
         "..",
-        "views/email",
+        "views/emails",
         `${emailData.template}.pug`,
       );
       const html = pug.renderFile(templatePath, emailData.variables);
-      const mailOptions = {
+      const mailOptions: SendMailOptions = {
         from: APP_CONFIG.SMTP_FROM_ADDRESS,
         to: emailData.to,
         subject: emailData.subject,
@@ -47,7 +47,7 @@ export class EmailService {
         stack: error.stack,
         emailData,
       });
-      throw new ClientError(`Failed to send emai: ${error.message}`);
+      throw new ClientError(`Failed to send email: ${error.message}`);
     }
   }
 }

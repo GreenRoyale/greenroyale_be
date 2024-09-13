@@ -26,7 +26,7 @@ const emailQueue = new Bull("Green-Royale-Email", {
     duration: 1000,
   },
   defaultJobOptions: {
-    removeOnComplete: true,
+    removeOnComplete: false,
     attempts: 3,
     backoff: {
       type: "exponential",
