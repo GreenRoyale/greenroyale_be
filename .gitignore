@@ -2,3 +2,6 @@ node_modules/
 .env
 data/
 build/
+fly.toml
+fly.toml.bk
+fly*
