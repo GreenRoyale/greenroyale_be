@@ -9,7 +9,11 @@ const authService = new AuthService();
 
 export const registerUser = asyncHandler(
   async (req: Request, res: Response) => {
-    const { user, message } = await authService.createUser(req.body);
+    const verificationURL = `${req.protocol}://${req.get("host")}/${config.get<string>("prefix")}/auth/verify-email/?token=`;
+    const { user, message } = await authService.createUser(
+      req.body,
+      verificationURL,
+    );
     createSendToken(user, 201, message, req, res);
   },
 );
@@ -40,7 +44,11 @@ export const resendVerificationEmail = asyncHandler(
     }
     const userId = req.user.id;
 
-    const { message } = await authService.resendVerificationEmail(userId);
+    const verificationURL = `${req.protocol}://${req.get("host")}/${config.get<string>("prefix")}/auth/verify-email/?token=`;
+    const { message } = await authService.resendVerificationEmail(
+      userId,
+      verificationURL,
+    );
 
     res.status(200).json({
       status: "success",
