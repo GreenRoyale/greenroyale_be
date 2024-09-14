@@ -8,7 +8,6 @@ const AppDataSource = new DataSource({
   type: "postgres",
   host: config.get<string>("DB_HOST"),
   port: config.get<number>("DB_PORT") ?? 5432,
-  url: "postgres://postgres:postgres@localhost:5432/green_royale",
   username: config.get<string>("DB_USER"),
   password: config.get<string>("DB_PASSWORD"),
   database: config.get<string>("DB_NAME"),

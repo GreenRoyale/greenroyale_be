@@ -17,4 +17,7 @@ export class Recycling extends ExtendedBaseEntity {
 
   @ManyToOne(() => User, (user) => user.recycling_records)
   user: User;
+
+  @Column("float", { nullable: false })
+  point: number;
 }

@@ -9,13 +9,10 @@ export const createRecyclingLog = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const materials = req.body;
 
-    console.log(materials);
     const response = await recyclingService.createRecyclingLog(
       materials,
-      "req.user.id",
+      req.user.id,
     );
-
-    console.log({ response });
 
     responseHandler.sendSuccessResponse(
       res,

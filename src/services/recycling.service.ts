@@ -1,6 +1,6 @@
 import { Recycling } from "../entities/recycling.entity";
 import { IRecyclingSchema } from "../schemas/recycling";
-import log from "../utils/logger";
+import rewardPointSystem from "../utils/reward-point-syetem";
 import { UserService } from "./user.service";
 
 const userService = new UserService();
@@ -12,25 +12,28 @@ export class RecyclingService {
     message: string;
     record: { recycling?: any };
   }> {
-    log.info("the code is even here in the service");
     const user = await userService.fetchUserRecord(userId, "userId");
 
-    const recycling = new Recycling();
-    // const material = new RecyclingMaterial();
-    for (const item of payload.materials) {
+    const recyclingEntities = payload.materials.map((item) => {
+      const recycling = new Recycling();
+      recycling.user = user;
       recycling.material = item.materialType;
+      recycling.point = rewardPointSystem(item.materialType) * item.quantity;
       recycling.quantity = item.quantity as number;
-      recycling.user = {} as any;
-    }
+      return recycling;
+    });
 
-    // const recyclingMaterial = await RecyclingMaterial.save(material);
-    const recyclingResponse = await Recycling.save(recycling);
-
+    const recycling = await Recycling.save(recyclingEntities);
+    const recyclingDTO = recycling.map((item) => {
+      return {
+        ...item,
+        user: item.user.id,
+      };
+    });
     return {
       message: "Recycling log created successfully",
       record: {
-        recycling: recyclingResponse,
-        // recyclingMaterial,
+        recycling: recyclingDTO,
       },
     };
   }
