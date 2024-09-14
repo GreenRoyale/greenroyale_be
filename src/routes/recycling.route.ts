@@ -19,8 +19,6 @@ recyclingRouter.post(
 
 recyclingRouter.get("/", getAllRecyclingLog);
 
-recyclingRouter.get("/", getAllRecyclingLog);
-
 recyclingRouter.get("/:recycle_id", getRecyclingLogById);
 
 export default recyclingRouter;

@@ -36,11 +36,6 @@ export interface CustomJwtPayload extends JwtPayload {
   password_version: number;
 }
 
-export interface IResponseMessage {
-  response_code: number;
-  message: string;
-}
-
 export type UserUpdatePayload = IUpdateUserProfileSchema & {
   photo?: string;
 };

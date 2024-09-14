@@ -2,7 +2,7 @@ import { recyclingDTO } from "../dtos/recycling.dto";
 import { Recycling } from "../entities/recycling.entity";
 import { IRecyclingDTO } from "../interfaces";
 import { IRecyclingSchema } from "../schemas/recycling";
-import rewardPointSystem from "../utils/reward-point-syetem";
+import rewardPointSystem from "../utils/reward-point-system";
 import { UserService } from "./user.service";
 
 const userService = new UserService();
