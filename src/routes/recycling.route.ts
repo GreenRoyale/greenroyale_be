@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { createRecyclingLog } from "../controllers/recycling.controller";
+import {
+  createRecyclingLog,
+  getAllRecyclingLog,
+} from "../controllers/recycling.controller";
 import { deserializeUser } from "../middlewares/deserializeUser";
 import { validateData } from "../middlewares/validateData";
 import { recyclingSchema } from "../schemas/recycling";
@@ -12,5 +15,7 @@ recyclingRouter.post(
   deserializeUser,
   createRecyclingLog,
 );
+
+recyclingRouter.get("/", getAllRecyclingLog);
 
 export default recyclingRouter;

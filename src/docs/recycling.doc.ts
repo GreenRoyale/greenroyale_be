@@ -1,3 +1,4 @@
+export const createRecyclingDocs = `
 /**
  * @swagger
  * /api/v1/recycling:
@@ -124,3 +125,109 @@
  *                   type: string
  *                   example: "Unauthorized"
  */
+`;
+
+export const getAllRecyclingLog = `
+/**
+ * @swagger
+ * /api/v1/recycling:
+ *   get:
+ *     summary: Get all recycling logs
+ *     description: This endpoint retrieves all recycling logs. Optionally, logs can be filtered by user or other criteria.
+ *     tags:
+ *       - Recycling
+ *     security:
+ *       - bearerAuth: []  # Assumes you're using Bearer token authentication
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         required: false
+ *         description: Optional user ID to filter recycling logs by a specific user
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved recycling logs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "success"
+ *                 message:
+ *                   type: string
+ *                   example: "Recycling logs retrieved successfully"
+ *                 data:
+ *                   type: array
+ *                   description: Array of recycling log records
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       user:
+ *                         type: string
+ *                         format: uuid
+ *                         description: The user ID associated with the recycling record
+ *                         example: "ebf04518-0ff9-4b40-93a8-3fa8f1ba02cb"
+ *                       material:
+ *                         type: string
+ *                         description: The type of recycling material
+ *                         example: "plastic"
+ *                       point:
+ *                         type: number
+ *                         description: Points assigned for the recycling action
+ *                         example: 4
+ *                       quantity:
+ *                         type: number
+ *                         description: The quantity of the recycled material
+ *                         example: 10
+ *                       id:
+ *                         type: string
+ *                         format: uuid
+ *                         description: The unique ID of the recycling log
+ *                         example: "28cef7fc-f6ba-4293-b1b5-e9bbdb9ac703"
+ *                       created_at:
+ *                         type: string
+ *                         format: date-time
+ *                         description: When the recycling log was created
+ *                         example: "2024-09-14T04:05:27.618Z"
+ *                       updated_at:
+ *                         type: string
+ *                         format: date-time
+ *                         description: When the recycling log was last updated
+ *                         example: "2024-09-14T04:05:27.618Z"
+ *                       deleted_at:
+ *                         type: string
+ *                         format: date-time
+ *                         description: When the recycling log was deleted (if applicable)
+ *                         example: null
+ *       400:
+ *         description: Bad request. Invalid input or missing fields.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "error"
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid query parameters"
+ *       401:
+ *         description: Unauthorized. The user is not authenticated.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "error"
+ *                 message:
+ *                   type: string
+ *                   example: "Unauthorized"
+ */
+`;
