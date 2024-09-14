@@ -1,3 +1,4 @@
+import { RECYCLINGMATERIALENUM } from "../entities/recycling-material.entity";
 import { IUpdateUserProfileSchema } from "../schemas/user";
 
 import { JwtPayload } from "jsonwebtoken";
@@ -46,4 +47,15 @@ export type UserUpdatePayload = IUpdateUserProfileSchema & {
 
 export interface IUserProfilePicturePayload {
   photo: string;
+}
+
+export interface IRecyclingDTO {
+  user: string;
+  material: RECYCLINGMATERIALENUM;
+  quantity: number;
+  point: number;
+  id: string;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
 }

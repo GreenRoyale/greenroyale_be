@@ -22,3 +22,15 @@ export const createRecyclingLog = asyncHandler(
     );
   },
 );
+
+export const getAllRecyclingLog = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const response = await recyclingService.fetchAllRecyclingLog();
+
+    responseHandler.sendSuccessResponse(
+      res,
+      "Retrieved successfully",
+      response,
+    );
+  },
+);

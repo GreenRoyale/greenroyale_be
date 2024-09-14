@@ -1,4 +1,6 @@
+import { recyclingDTO } from "../dtos/recycling.dto";
 import { Recycling } from "../entities/recycling.entity";
+import { IRecyclingDTO } from "../interfaces";
 import { IRecyclingSchema } from "../schemas/recycling";
 import rewardPointSystem from "../utils/reward-point-syetem";
 import { UserService } from "./user.service";
@@ -10,7 +12,7 @@ export class RecyclingService {
     userId: string,
   ): Promise<{
     message: string;
-    record: { recycling?: any };
+    record: { recycling?: IRecyclingDTO[] };
   }> {
     const user = await userService.fetchUserRecord(userId, "userId");
 
@@ -24,17 +26,18 @@ export class RecyclingService {
     });
 
     const recycling = await Recycling.save(recyclingEntities);
-    const recyclingDTO = recycling.map((item) => {
-      return {
-        ...item,
-        user: item.user.id,
-      };
-    });
+    const DTOResponse = recyclingDTO(recycling);
     return {
       message: "Recycling log created successfully",
       record: {
-        recycling: recyclingDTO,
+        recycling: DTOResponse,
       },
     };
+  }
+
+  public async fetchAllRecyclingLog(): Promise<IRecyclingDTO[] | null> {
+    const recycling = await Recycling.find({ relations: ["user"] });
+    const DTOResponse = recyclingDTO(recycling);
+    return DTOResponse;
   }
 }
