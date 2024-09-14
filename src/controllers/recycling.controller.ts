@@ -34,3 +34,17 @@ export const getAllRecyclingLog = asyncHandler(
     );
   },
 );
+
+export const getRecyclingLogById = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const response = await recyclingService.fetchRecyclingLogById(
+      req.params.recycle_id,
+    );
+
+    responseHandler.sendSuccessResponse(
+      res,
+      "Retrieved successfully",
+      response,
+    );
+  },
+);

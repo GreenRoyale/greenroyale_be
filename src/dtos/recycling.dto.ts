@@ -1,12 +1,17 @@
 import { Recycling } from "../entities/recycling.entity";
+import { ClientError } from "../exceptions/clientError";
 
 export const recyclingDTO = (data: Recycling[]) => {
-  const recyclingDTO = data.map((item) => {
-    return {
-      ...item,
-      user: item.user.id,
-    };
-  });
+  try {
+    const recyclingDTO = data.map((item) => {
+      return {
+        ...item,
+        user: item.user.id,
+      };
+    });
 
-  return recyclingDTO;
+    return recyclingDTO;
+  } catch (error) {
+    throw new ClientError("Error converting recycling DTO");
+  }
 };

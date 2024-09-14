@@ -40,4 +40,15 @@ export class RecyclingService {
     const DTOResponse = recyclingDTO(recycling);
     return DTOResponse;
   }
+
+  public async fetchRecyclingLogById(
+    recycleId: string,
+  ): Promise<IRecyclingDTO | null> {
+    const recycling = await Recycling.findOne({
+      where: { id: recycleId },
+      relations: ["user"],
+    });
+    const DTOResponse = recyclingDTO([recycling])[0];
+    return DTOResponse;
+  }
 }
