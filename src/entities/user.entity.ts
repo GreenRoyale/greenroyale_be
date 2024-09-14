@@ -8,8 +8,9 @@ import {
   ValidateIf,
 } from "class-validator";
 import crypto from "crypto";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import ExtendedBaseEntity from "./base.entity";
+import { Recycling } from "./recycling.entity";
 
 @Entity({ name: "user_tbl" })
 class User extends ExtendedBaseEntity {
@@ -49,6 +50,9 @@ class User extends ExtendedBaseEntity {
   @Column({ type: "timestamp", nullable: true })
   @IsOptional()
   token_expiry: Date | null;
+
+  @OneToMany(() => Recycling, (recycling) => recycling.user)
+  recycling_records: Recycling[];
 
   async isCorrectPassword(candidatePassword: string): Promise<boolean> {
     return argon.verify(this.password, candidatePassword);
