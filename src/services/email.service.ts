@@ -9,15 +9,25 @@ import log from "../utils/logger";
 export class EmailService {
   private transporter: Transporter;
   constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: APP_CONFIG.SMTP_HOST,
-      port: APP_CONFIG.SMTP_PORT,
-      secure: APP_CONFIG.SMTP_SECURE,
-      auth: {
-        user: APP_CONFIG.SMTP_USER,
-        pass: APP_CONFIG.SMTP_PASSWORD,
-      },
-    });
+    if (APP_CONFIG.NODE_ENV === "production") {
+      this.transporter = nodemailer.createTransport({
+        service: "SendGrid",
+        auth: {
+          user: APP_CONFIG.SENDGRID_USERNAME,
+          pass: APP_CONFIG.SENDGRID_PASSWORD,
+        },
+      });
+    } else {
+      this.transporter = nodemailer.createTransport({
+        host: APP_CONFIG.SMTP_HOST,
+        port: APP_CONFIG.SMTP_PORT,
+        secure: APP_CONFIG.SMTP_SECURE,
+        auth: {
+          user: APP_CONFIG.SMTP_USER,
+          pass: APP_CONFIG.SMTP_PASSWORD,
+        },
+      });
+    }
   }
 
   /**
@@ -40,6 +50,7 @@ export class EmailService {
         subject: emailData.subject,
         html,
       };
+      console.log("EmailService is called");
       await this.transporter.sendMail(mailOptions);
       return `Email successfully sent to ${emailData.to}`;
     } catch (error) {

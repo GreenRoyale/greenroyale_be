@@ -12,6 +12,9 @@ const APP_CONFIG = Object.freeze({
   SMTP_USER: config.SMTP_USER || "user@example.com",
   SMTP_PASSWORD: config.SMTP_PASSWORD || "password",
   BULL_BOARD_PASSWORD: "green-royale",
+  SENDGRID_USERNAME: config.SENDGRID_USERNAME,
+  SENDGRID_PASSWORD: config.SENDGRID_PASSWORD,
+  NODE_ENV: config.NODE_ENV,
 } as const);
 
 export default APP_CONFIG;
