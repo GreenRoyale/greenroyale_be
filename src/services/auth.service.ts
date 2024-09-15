@@ -51,7 +51,7 @@ export class AuthService {
           },
         };
 
-        await addEmailToQueue(emailData);
+        // await addEmailToQueue(emailData);
 
         delete newUser.password;
         delete newUser.password_version;
